@@ -1,0 +1,27 @@
+## 
+USE CASE:
+A good classic accounting problem is to print an aging report of old billings. 
+Let’s use the Friends of Pepperoni, who have a charge card at our pizza joint. 
+It would be nice to find out if you should have let club members charge pizza on their cards. 
+You have a table of charges that contains a member identification number (cust_id), a date (bill_date), and an amount (pizza_amt). 
+None of these is a key, so there can be multiple entries for a customer, with various dates and amounts. 
+
+This is an old-fashioned journal file, done as an SQL table. What you are trying to do is get a sum of amounts paid by each member within an age range.
+The ranges are 0 to 30 days old, 31 to 60 days old, 61 to 90 days old, and everything over 90 days old. 
+This is called an aging report on account receivables, and you use it to see what the Friends of Pepperoni program is doing to you.
+
+##
+Sol:
+
+select cust_id,'0-30 days' AS age, sum(pizza_amt) from Friends of Pepperoni
+        WHERE bill_date BETWEEN CURRENT_DATE AND (CURRENT_DATE - INTERVAL 30 DAY) GROUP BY cust_id
+        UNION ALL
+select cust_id,'31-60 days' AS age, sum(pizza_amt) from Friends of Pepperoni
+        WHERE bill_date BETWEEN (CURRENT_DATE - INTERVAL 31 DAY) AND (CURRENT_DATE - INTERVAL 60DAY) GROUP BY cust_id
+        UNION ALL
+select cust_id,'61-90 days' AS age, sum(pizza_amt) from Friends of Pepperoni
+        WHERE bill_date BETWEEN (CURRENT_DATE - INTERVAL 61 DAY) AND (CURRENT_DATE - INTERVAL 90DAY) GROUP BY cust_id
+        UNION ALL
+select cust_id,'90+ days' AS age, sum(pizza_amt) from Friends of Pepperoni
+        WHERE bill_date<CURRENT_DATE - INTERVAL 90DAY GROUP BY cust_id
+        UNION ALL
