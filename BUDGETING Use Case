@@ -1,0 +1,40 @@
+Mark Frontera at LanSoft, Inc., in Miami, Florida, posted this problem in September 1995. 
+He has budgeting information that consists of the following three tables: the items to be paid for, 
+the estimated amounts to be spent on them, and the actual amounts spent on them. I am going to skip the DDL and post the data,
+since they are simple. Notice that some items are covered by more than one check, and sometimes one check covers several items
+
+Items  
+item_nbr   item_descr
+=====================  
+10        'Item 10'  
+20        'Item 20'  
+30        'Item 30'  
+40        'Item 40'  
+50        'item 50
+
+Actuals
+item_nbr  actual_amt   check_nbr 
+=================================  
+10       300.00         '1111'  
+20       325.00         '2222'  
+20       100.00         '3333'  
+30       525.00         '1111'
+
+
+Estimates
+item_nbr  estimated_amt 
+=========================   
+10        300.00   
+10        50.00   
+20        325.00   
+20        110.00   
+40        25.00
+
+output should be as follows:
+
+item_nbr item_descr   actual_tot estimate_tot  check_nbr 
+===================================================   
+10       'item 10'     300.00   350.00       '1111'   
+20       'item 20'     425.00   435.00       'Mixed'  
+30       'item 30'     525.00     NULL       '1111'  
+40       'item 40'       NULL    25.00        NULL
