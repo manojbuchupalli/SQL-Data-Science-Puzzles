@@ -1,3 +1,6 @@
+
+### USE CASE
+
 Mark Frontera at LanSoft, Inc., in Miami, Florida, posted this problem in September 1995. 
 He has budgeting information that consists of the following three tables: the items to be paid for, 
 the estimated amounts to be spent on them, and the actual amounts spent on them. I am going to skip the DDL and post the data,
@@ -38,3 +41,18 @@ item_nbr item_descr   actual_tot estimate_tot  check_nbr
 20       'item 20'     425.00   435.00       'Mixed'  
 30       'item 30'     525.00     NULL       '1111'  
 40       'item 40'       NULL    25.00        NULL
+
+
+###
+
+Sol:SELECT A.item_nbr, A.item_descr,
+        SUM(B.actual_amt) AS tot_tot,
+       SUM(C.estimated_amt) AS estimate_tot,
+       (SELECT CASE WHEN COUNT(check_nbr) = 1
+                    THEN MAX(check_nbr)                    
+                    ELSE 'Mixed' END          
+        FROM Actuals) AS check_nbr   FROM (items AS A LEFT OUTER JOIN  Actuals AS B ON A.item_nbr = B.item_nbr)   
+        LEFT OUTER JOIN            
+        Estimates AS C       
+        ON A.item_nbr = C	.item_nbr
+        GROUP BY A.item_nbr, A.item_descr;
